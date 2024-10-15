@@ -1,7 +1,7 @@
 #include "ArduRoomba.h"
 
-ArduRoomba::ArduRoomba(int rxPin, int txPin, int brcPin)
-    : _rxPin(rxPin), _txPin(txPin), _brcPin(brcPin), _irobot(rxPin, txPin)
+ArduRoomba::ArduRoomba(int baudRate, int rxPin, int txPin, int brcPin, int uart)
+    : _baudRate(baudRate), _rxPin(rxPin), _txPin(txPin), _brcPin(brcPin), _irobot(uart)
 {
   // Constructor implementation
 }
@@ -215,7 +215,7 @@ bool ArduRoomba::_parseStreamBuffer(byte *packets, int len, RoombaInfos *infos)
   return true;
 }
 
-bool ArduRoomba::_readStream() 
+bool ArduRoomba::_readStream()
 {
   unsigned long timeout =
       millis() + ARDUROOMBA_STREAM_TIMEOUT; // stream start every 15ms
@@ -264,7 +264,7 @@ bool ArduRoomba::_readStream()
   return isStreamEnd && isChecksum;
 }
 
-int ArduRoomba::_sensorsListLength(char sensorlist[]) 
+int ArduRoomba::_sensorsListLength(char sensorlist[])
 {
   int i;
   int count = 0;
@@ -274,7 +274,7 @@ int ArduRoomba::_sensorsListLength(char sensorlist[])
   return count;
 }
 
-void ArduRoomba::queryStream(char sensorlist[]) 
+void ArduRoomba::queryStream(char sensorlist[])
 {
   Serial.print("ArduRoomba::queryStream:\n");
   _nbSensorsStream = _sensorsListLength(sensorlist);
@@ -296,7 +296,7 @@ void ArduRoomba::resetStream()
   _irobot.write(_zero);
 }
 
-bool ArduRoomba::refreshData(RoombaInfos *stateInfos) 
+bool ArduRoomba::refreshData(RoombaInfos *stateInfos)
 {
   long now = millis();
   if (now > stateInfos->nextRefresh) {
@@ -568,7 +568,9 @@ void ArduRoomba::roombaSetup()
   }
   Serial.println("Attempting connection to iRobot OI");
   delay(150);
-  _irobot.begin(19200);
+
+  // Baud rate, parity mode, RX, TX
+  _irobot.begin(_baudRate, SERIAL_8N1, _rxPin, _txPin);
 
   Serial.println("Sending Start to OI");
   delay(150);

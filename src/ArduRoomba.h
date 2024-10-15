@@ -2,7 +2,7 @@
 #define ArduRoomba_h
 
 #include <Arduino.h>
-#include <SoftwareSerial.h>
+#include <HardwareSerial.h>
 
 #define ARDUROOMBA_REFRESH_DELAY 40
 #define ARDUROOMBA_STREAM_TIMEOUT 16 // stream time slot = 15ms
@@ -66,7 +66,7 @@ class ArduRoomba
 {
 public:
   // Constructor
-  ArduRoomba(int rxPin, int txPin, int brcPin); // Constructor
+  ArduRoomba(int baudRate, int rxPin, int txPin, int brcPin, int uart); // Constructor
 
   // Custom structs to use in main code.
   struct Note
@@ -242,12 +242,12 @@ public:
 
 private:
   const byte _zero = 0x00;
-  int _rxPin, _txPin, _brcPin;
-  SoftwareSerial _irobot; // SoftwareSerial instance for communication with the Roomba
-  
+  int _baudRate, _rxPin, _txPin, _brcPin;
+  HardwareSerial _irobot; // HardwareSerial instance for communication with the Roomba
+
   byte _streamBuffer[100] = {}; 
   int _nbSensorsStream = 0; // number of requested sensors stream
-  int _streamBufferCursor = 0; 
+  int _streamBufferCursor = 0;
   char _sensorsStream[60]; // max 52 sensors in OpenInterface spec
 
   int _sensorsListLength(char sensorlist[]); // determines the size of the table
