@@ -195,6 +195,7 @@ public:
 
   // OI commands
   void start();                                      // Start the OI
+  void stop();                                       // Stop the OI
   void baud(char baudCode);                          // Set the baud rate
   void safe();                                       // Put the OI into Safe mode
   void full();                                       // Put the OI into Full mode
@@ -205,18 +206,22 @@ public:
   void schedule(ScheduleStore scheduleData);         // Set the schedule
   void setDayTime(char day, char hour, char minute); // Set the day and time
   void power();                                      // Power down the OI
+  void reset();                                      // Resets the roomba as if you had removed and reinserted the battery
+
 
   // Actuator commands
-  void drive(int velocity, int radius);                                         // Drive the robot
-  void driveDirect(int rightVelocity, int leftVelocity);                        // Drive the robot directly
-  void drivePWM(int rightPWM, int leftPWM);                                     // Drive the robot with PWM
-  void motors(byte data);                                                       // Control the motors
-  void pwmMotors(char mainBrushPWM, char sideBrushPWM, char vacuumPWM);         // Control the PWM of the motors
-  void leds(int ledBits, int powerColor, int powerIntensity);                   // Control the LEDs
-  void schedulingLeds(int weekDayLedBits, int scheduleLedBits);                 // Control the scheduling LEDs
-  void digitLedsRaw(int digitThree, int digitTwo, int digitOne, int digitZero); // Control the digit LEDs
-  void song(Song songData);                                                     // Load a song
-  void play(int songNumber);                                                    // Play a song
+  void drive(int velocity, int radius);                                          // Drive the robot
+  void driveDirect(int rightVelocity, int leftVelocity);                         // Drive the robot directly
+  void drivePWM(int rightPWM, int leftPWM);                                      // Drive the robot with PWM
+  void motors(byte data);                                                        // Control the motors
+  void pwmMotors(char mainBrushPWM, char sideBrushPWM, char vacuumPWM);          // Control the PWM of the motors
+  void leds(int ledBits, int powerColor, int powerIntensity);                    // Control the LEDs
+  void schedulingLeds(int weekDayLedBits, int scheduleLedBits);                  // Control the scheduling LEDs
+  void digitLedsRaw(int digitThree, int digitTwo, int digitOne, int digitZero);  // Control the digit LEDs
+  void digitLedsAscii(int digitThree, int digitTwo, int digitOne, int digitZero);// Control the digit LEDs
+  void song(Song songData);                                                      // Load a song
+  void play(int songNumber);                                                     // Play a song
+  void buttons(int buttons);                                                     // Trigger a button press
 
   // Input commands
   void sensors(char packetID);                      // Request a sensor packet
@@ -225,6 +230,7 @@ public:
   void queryStream(char sensorlist[]);              // Request a list of sensor packets to stream
   void resetStream();                               // Request an empty list of sensor packets to stream
   bool refreshData(RoombaInfos *infos);             // Read stream slot
+  void pauseResumeStream(int state);
 
   // Custom commands
   void roombaSetup(); // Setup the Roomba

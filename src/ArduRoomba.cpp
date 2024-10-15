@@ -312,10 +312,22 @@ bool ArduRoomba::refreshData(RoombaInfos *stateInfos)
   }
   return false;
 }
+
+void ArduRoomba::pauseResumeStream(int state)
+{
+  _irobot.write(150);
+  _irobot.write(state);
+}
+
 // OI commands
 void ArduRoomba::start()
 {
   _irobot.write(128);
+}
+
+void ArduRoomba::stop()
+{
+  _irobot.write(173);
 }
 
 void ArduRoomba::baud(char baudCode)
@@ -386,6 +398,11 @@ void ArduRoomba::power()
   _irobot.write(133);
 }
 
+void ArduRoomba::reset()
+{
+  _irobot.write(7);
+}
+
 // Actuator commands
 void ArduRoomba::drive(int velocity, int radius)
 {
@@ -452,6 +469,15 @@ void ArduRoomba::digitLedsRaw(int digitThree, int digitTwo, int digitOne, int di
   _irobot.write(digitZero);
 }
 
+void ArduRoomba::digitLedsAscii(int digitThree, int digitTwo, int digitOne, int digitZero)
+{
+  _irobot.write(164);
+  _irobot.write(digitThree);
+  _irobot.write(digitTwo);
+  _irobot.write(digitOne);
+  _irobot.write(digitZero);
+}
+
 void ArduRoomba::song(Song songData)
 {
   _irobot.write(140);
@@ -468,6 +494,12 @@ void ArduRoomba::play(int songNumber)
 {
   _irobot.write(141);
   _irobot.write(songNumber);
+}
+
+void ArduRoomba::buttons(int buttons)
+{
+  _irobot.write(165);
+  _irobot.write(buttons);
 }
 
 // Input commands
